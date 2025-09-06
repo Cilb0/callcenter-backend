@@ -13,7 +13,7 @@ function App() {
     setNewMessage("");
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/chat/", {
+      const response = await fetch(`${process.env.REACT_APP_API_BASE}/chat/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -57,7 +57,10 @@ function App() {
         onChange={(e) => setNewMessage(e.target.value)}
         style={{ width: "80%", padding: "5px" }}
       />
-      <button onClick={sendMessage} style={{ padding: "5px 10px", marginLeft: "5px" }}>
+      <button
+        onClick={sendMessage}
+        style={{ padding: "5px 10px", marginLeft: "5px" }}
+      >
         Gönder
       </button>
     </div>
