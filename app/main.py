@@ -1,27 +1,24 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routes import customer_routes, fault_routes, chat_routes
-from dotenv import load_dotenv
-import os
 
-# .env dosyasını yükle
-load_dotenv()
+app = FastAPI(title="Müşteri Hizmetleri Botu")
 
-app = FastAPI()
-
+# CORS ayarları - frontend (Netlify) Render API'ye bağlanabilsin
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # Gerekirse buraya sadece Netlify domainini yazabilirsin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Routerları ekle
-app.include_router(customer_routes.router)
-app.include_router(fault_routes.router)
-app.include_router(chat_routes.router)
+# Route kayıtları
+app.include_router(customer_routes.router, prefix="/customers", tags=["customers"])
+app.include_router(fault_routes.router, prefix="/faults", tags=["faults"])
+app.include_router(chat_routes.router, prefix="/chat", tags=["chat"])
+
 
 @app.get("/")
-async def root():
-    return {"message": "Call Center API çalışıyor 🚀", "OPENAI_API_KEY": os.getenv("OPENAI_API_KEY")}
+def root():
+    return {"message": "Müşteri Hizmetleri Botu API çalışıyor!"}
